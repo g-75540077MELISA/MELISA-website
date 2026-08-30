@@ -1,0 +1,1639 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MELISA – Melodi Islam Anak-Anak</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        melisa: {
+                            emerald: '#059669',
+                            teal: '#0d9488',
+                            amber: '#f59e0b',
+                            rose: '#f43f5e',
+                            sky: '#0284c7',
+                            purple: '#8b5cf6',
+                            bgLight: '#f0fdf4',
+                        }
+                    },
+                    fontFamily: {
+                        fredoka: ['Fredoka', 'sans-serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+        }
+        h1, h2, h3, .font-heading {
+            font-family: 'Fredoka', cursive, sans-serif;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .lyric-text {
+            line-height: 2.2;
+            letter-spacing: 0.02em;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between selection:bg-emerald-200 selection:text-emerald-900">
+
+    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-emerald-100 shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+            <!-- Brand Logo -->
+            <button onclick="navigateTo('home')" class="flex items-center gap-3 text-left group">
+                <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-400 text-white flex items-center justify-center text-xl font-bold shadow-md shadow-emerald-200 group-hover:scale-105 transition-transform">
+                    <i class="fa-solid fa-music"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="font-heading text-2xl font-bold tracking-wide text-emerald-700">MELISA</span>
+                        <span class="text-xs font-semibold px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded-full hidden sm:inline-block">KPM</span>
+                    </div>
+                    <p class="text-xs text-slate-500 font-medium hidden md:block">Melodi Islam Anak-Anak • Belajar, Bernyanyi, Mengingati</p>
+                </div>
+            </button>
+
+            <!-- Navigation Controls & Badge -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <!-- User Type Badge -->
+                <div id="userBadge" class="hidden items-center gap-1.5 px-3 py-1 bg-amber-50 border border-amber-200 text-amber-800 text-xs font-bold rounded-full">
+                    <span id="userBadgeIcon">👨‍🏫</span>
+                    <span id="userBadgeText">GURU</span>
+                    <button onclick="navigateTo('role_select')" title="Tukar Peranan" class="ml-1 text-amber-600 hover:text-amber-900">
+                        <i class="fa-solid fa-arrows-rotate"></i>
+                    </button>
+                </div>
+
+                <!-- Admin Editor Button (PIN Protected) -->
+                <button onclick="checkAdminAccessAndNavigate()" class="px-3 py-1.5 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded-xl text-xs font-bold flex items-center gap-1.5 border border-emerald-200 transition-colors">
+                    <i class="fa-solid fa-lock text-[10px] text-emerald-500"></i>
+                    <i class="fa-solid fa-sliders"></i>
+                    <span class="hidden sm:inline">Pengurusan Kandungan</span>
+                </button>
+
+                <!-- Feedback Button -->
+                <button onclick="navigateTo('feedback')" class="px-3 py-1.5 bg-purple-50 text-purple-700 hover:bg-purple-100 rounded-xl text-xs font-bold flex items-center gap-1.5 border border-purple-200 transition-colors">
+                    <i class="fa-solid fa-comment-dots"></i>
+                    <span class="hidden sm:inline">Maklum Balas</span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Breadcrumbs Toolbar -->
+        <div id="breadcrumbBar" class="bg-slate-100 border-t border-slate-200/60 py-1.5 px-4 hidden">
+            <div class="max-w-6xl mx-auto flex items-center justify-between text-xs text-slate-600">
+                <div id="breadcrumbList" class="flex items-center gap-1 overflow-x-auto whitespace-nowrap py-0.5">
+                    <!-- Dynamic breadcrumbs rendered here -->
+                </div>
+                <button id="backBtn" onclick="goBack()" class="flex items-center gap-1 px-2.5 py-1 bg-white hover:bg-slate-200 border border-slate-300 rounded-lg text-slate-700 font-medium transition-colors shadow-xs">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    <span>Kembali</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 py-6 flex-grow w-full">
+
+        <!-- ==================== SCREEN 1: MUKA DEPAN ==================== -->
+        <section id="screen-home" class="screen-view">
+            <div class="bg-gradient-to-br from-emerald-600 via-teal-600 to-cyan-700 rounded-3xl p-6 sm:p-10 text-white shadow-xl relative overflow-hidden mb-8">
+                <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+                <div class="absolute left-1/2 top-0 w-96 h-96 bg-yellow-400/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                <div class="relative z-10 max-w-2xl">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 bg-white/20 backdrop-blur-md rounded-full text-xs font-semibold mb-4 border border-white/20">
+                        <i class="fa-solid fa-star text-yellow-300"></i>
+                        <span>Platform Lagu Pendidikan Islam Sekolah Rendah</span>
+                    </div>
+                    
+                    <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight mb-3 font-heading leading-tight">
+                        MELISA
+                    </h1>
+                    <p class="text-xl sm:text-2xl font-medium text-emerald-100 mb-2 font-heading">
+                        Melodi Islam Anak-Anak
+                    </p>
+                    <p class="text-lg sm:text-xl font-bold text-yellow-300 mb-6 italic">
+                        “Belajar, Bernyanyi, Mengingati.”
+                    </p>
+                    
+                    <p class="text-slate-100 text-sm sm:text-base leading-relaxed mb-8 max-w-xl">
+                        Aplikasi interaktif yang menghimpunkan lirik lagu Pendidikan Islam KPM, video YouTube, petunjuk PdP guru, Standard Kandungan (SK/SP), dan kuiz interaktif Quizizz untuk murid Tahun 1 hingga 6.
+                    </p>
+
+                    <div class="flex flex-wrap gap-4 items-center">
+                        <button onclick="navigateTo('role_select')" class="px-8 py-4 bg-yellow-400 hover:bg-yellow-300 text-slate-900 font-heading text-xl font-bold rounded-2xl shadow-lg hover:shadow-yellow-400/40 hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center gap-3">
+                            <span>MULA SEKARANG</span>
+                            <i class="fa-solid fa-circle-play text-2xl"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md transition-shadow">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-xl mb-4 font-bold">
+                        <i class="fa-solid fa-book-open text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold font-heading text-slate-800 mb-2">Selaras Buku Teks KPM</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">Susunan mengikut Tahun 1 hingga 6 dan 7 Bidang utama Pendidikan Islam (Al-Quran, Hadis, Jawi, Akidah, Ibadah, Sirah, Adab).</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md transition-shadow">
+                    <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-xl mb-4 font-bold">
+                        <i class="fa-solid fa-music text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold font-heading text-slate-800 mb-2">Bahan Lengkap & Mudah</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">Video YouTube pembelajaran, lirik lagu mesra murid, panduan PdP guru, dan SK/SP terkini.</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md transition-shadow">
+                    <div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center text-xl mb-4 font-bold">
+                        <i class="fa-solid fa-shield-halved text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold font-heading text-slate-800 mb-2">Selamat & Dilindungi PIN</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">Murid boleh menggunakan kandungan lagu dan kuiz secara mudah. Pengurusan kandungan dilindungi kunci PIN khas guru.</p>
+                </div>
+            </div>
+
+            <!-- Global Usage Statistics Widget -->
+            <div class="bg-white p-6 rounded-2xl border border-emerald-100 shadow-sm">
+                <div class="flex items-center justify-between mb-4 border-b pb-3 border-slate-100">
+                    <h3 class="font-heading text-lg font-bold text-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-chart-pie text-emerald-600"></i>
+                        <span>Statistik Sesi Penggunaan</span>
+                    </h3>
+                    <span class="text-xs bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full font-semibold">Tersimpan Automatik</span>
+                </div>
+                <div class="grid grid-cols-3 gap-4 text-center">
+                    <div class="p-4 bg-emerald-50/70 rounded-xl border border-emerald-100">
+                        <div class="text-2xl sm:text-3xl font-extrabold font-heading text-emerald-700" id="statGuruCount">0</div>
+                        <div class="text-xs font-semibold text-emerald-900 mt-1">👨‍🏫 Sesi Guru</div>
+                    </div>
+                    <div class="p-4 bg-amber-50/70 rounded-xl border border-amber-100">
+                        <div class="text-2xl sm:text-3xl font-extrabold font-heading text-amber-700" id="statMuridCount">0</div>
+                        <div class="text-xs font-semibold text-amber-900 mt-1">🧒 Sesi Murid</div>
+                    </div>
+                    <div class="p-4 bg-sky-50/70 rounded-xl border border-sky-100">
+                        <div class="text-2xl sm:text-3xl font-extrabold font-heading text-sky-700" id="statTotalCount">0</div>
+                        <div class="text-xs font-semibold text-sky-900 mt-1">🌟 Jumlah Sesi</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== SCREEN 2: PILIH PENGGUNA ==================== -->
+        <section id="screen-role_select" class="screen-view hidden max-w-3xl mx-auto py-4">
+            <div class="text-center mb-8">
+                <span class="px-3 py-1 bg-emerald-100 text-emerald-800 text-xs font-bold rounded-full uppercase tracking-wider">Langkah 1</span>
+                <h2 class="text-3xl sm:text-4xl font-bold font-heading text-slate-900 mt-2 mb-2">SELAMAT DATANG KE MELISA</h2>
+                <p class="text-slate-600 text-base">Sila pilih kategori anda untuk memulakan penggunaan aplikasi:</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <!-- Guru Option -->
+                <button onclick="selectRole('guru')" class="group p-8 bg-white hover:bg-emerald-50/50 rounded-3xl border-2 border-slate-200 hover:border-emerald-500 shadow-md hover:shadow-xl transition-all duration-300 text-center flex flex-col items-center justify-between">
+                    <div class="w-24 h-24 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-5xl mb-6 group-hover:scale-110 transition-transform">👨‍🏫</div>
+                    <div>
+                        <h3 class="text-2xl font-bold font-heading text-slate-900 mb-2 group-hover:text-emerald-700">GURU</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed px-4">Akses lengkap bahan pengajaran, panduan lagu PdP, dan mod pengurusan kandungan.</p>
+                    </div>
+                    <div class="mt-6 w-full py-3 bg-emerald-600 group-hover:bg-emerald-700 text-white font-heading font-bold rounded-xl transition-colors">
+                        PILIH GURU
+                    </div>
+                </button>
+
+                <!-- Murid Option -->
+                <button onclick="selectRole('murid')" class="group p-8 bg-white hover:bg-amber-50/50 rounded-3xl border-2 border-slate-200 hover:border-amber-500 shadow-md hover:shadow-xl transition-all duration-300 text-center flex flex-col items-center justify-between">
+                    <div class="w-24 h-24 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-5xl mb-6 group-hover:scale-110 transition-transform">🧒</div>
+                    <div>
+                        <h3 class="text-2xl font-bold font-heading text-slate-900 mb-2 group-hover:text-amber-700">MURID</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed px-4">Tonton video, menyanyi lirik lagu, dan jawab kuiz interaktif Quizizz.</p>
+                    </div>
+                    <div class="mt-6 w-full py-3 bg-amber-500 group-hover:bg-amber-600 text-white font-heading font-bold rounded-xl transition-colors">
+                        PILIH MURID
+                    </div>
+                </button>
+            </div>
+        </section>
+
+        <!-- ==================== SCREEN 3: PILIH TAHUN ==================== -->
+        <section id="screen-year_select" class="screen-view hidden">
+            <div class="text-center mb-8">
+                <span class="px-3 py-1 bg-teal-100 text-teal-800 text-xs font-bold rounded-full uppercase tracking-wider">Langkah 2</span>
+                <h2 class="text-3xl font-bold font-heading text-slate-900 mt-2 mb-2">PILIH TAHUN PEMBELAJARAN</h2>
+                <p class="text-slate-600 text-sm">Pilih peringkat tahun persekolahan murid:</p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
+                <button onclick="selectYear(1)" class="group p-6 bg-white hover:bg-emerald-600 rounded-2xl border-2 border-slate-200 hover:border-emerald-600 shadow-sm hover:shadow-lg transition-all text-center">
+                    <div class="text-4xl font-extrabold font-heading text-emerald-600 group-hover:text-white mb-2">TAHUN 1</div>
+                    <p class="text-xs text-slate-500 group-hover:text-emerald-100 font-medium">Asas & Pengenalan</p>
+                </button>
+                <button onclick="selectYear(2)" class="group p-6 bg-white hover:bg-teal-600 rounded-2xl border-2 border-slate-200 hover:border-teal-600 shadow-sm hover:shadow-lg transition-all text-center">
+                    <div class="text-4xl font-extrabold font-heading text-teal-600 group-hover:text-white mb-2">TAHUN 2</div>
+                    <p class="text-xs text-slate-500 group-hover:text-teal-100 font-medium">Pengukuhan Asas</p>
+                </button>
+                <button onclick="selectYear(3)" class="group p-6 bg-white hover:bg-cyan-600 rounded-2xl border-2 border-slate-200 hover:border-cyan-600 shadow-sm hover:shadow-lg transition-all text-center">
+                    <div class="text-4xl font-extrabold font-heading text-cyan-600 group-hover:text-white mb-2">TAHUN 3</div>
+                    <p class="text-xs text-slate-500 group-hover:text-cyan-100 font-medium">Perkembangan Pembelajaran</p>
+                </button>
+                <button onclick="selectYear(4)" class="group p-6 bg-white hover:bg-sky-600 rounded-2xl border-2 border-slate-200 hover:border-sky-600 shadow-sm hover:shadow-lg transition-all text-center">
+                    <div class="text-4xl font-extrabold font-heading text-sky-600 group-hover:text-white mb-2">TAHUN 4</div>
+                    <p class="text-xs text-slate-500 group-hover:text-sky-100 font-medium">Tahap Pertengahan</p>
+                </button>
+                <button onclick="selectYear(5)" class="group p-6 bg-white hover:bg-purple-600 rounded-2xl border-2 border-slate-200 hover:border-purple-600 shadow-sm hover:shadow-lg transition-all text-center">
+                    <div class="text-4xl font-extrabold font-heading text-purple-600 group-hover:text-white mb-2">TAHUN 5</div>
+                    <p class="text-xs text-slate-500 group-hover:text-purple-100 font-medium">Pengetahuan Lanjutan</p>
+                </button>
+                <button onclick="selectYear(6)" class="group p-6 bg-white hover:bg-amber-600 rounded-2xl border-2 border-slate-200 hover:border-amber-600 shadow-sm hover:shadow-lg transition-all text-center">
+                    <div class="text-4xl font-extrabold font-heading text-amber-600 group-hover:text-white mb-2">TAHUN 6</div>
+                    <p class="text-xs text-slate-500 group-hover:text-amber-100 font-medium">Pengukuhan Akhir</p>
+                </button>
+            </div>
+        </section>
+
+        <!-- ==================== SCREEN 4: PILIH BIDANG ==================== -->
+        <section id="screen-field_select" class="screen-view hidden">
+            <div class="text-center mb-8">
+                <span class="px-3 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded-full uppercase tracking-wider">Langkah 3</span>
+                <h2 class="text-3xl font-bold font-heading text-slate-900 mt-2 mb-1">BIDANG PENDIDIKAN ISLAM</h2>
+                <p id="selectedYearLabel" class="text-emerald-700 font-bold text-base">Tahun --</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <button onclick="selectField('Al-Quran')" class="p-5 bg-white hover:bg-emerald-50 rounded-2xl border-2 border-emerald-200 hover:border-emerald-500 shadow-sm transition-all text-left flex items-center gap-4 group">
+                    <div class="w-14 h-14 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-3xl group-hover:scale-105 transition-transform">📖</div>
+                    <div>
+                        <h3 class="font-heading font-bold text-lg text-slate-800 group-hover:text-emerald-700">AL-QURAN</h3>
+                        <p class="text-xs text-slate-500">Bacaan, Hafazan & Kefahaman</p>
+                    </div>
+                </button>
+
+                <button onclick="selectField('Hadis')" class="p-5 bg-white hover:bg-teal-50 rounded-2xl border-2 border-teal-200 hover:border-teal-500 shadow-sm transition-all text-left flex items-center gap-4 group">
+                    <div class="w-14 h-14 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center text-3xl group-hover:scale-105 transition-transform">📜</div>
+                    <div>
+                        <h3 class="font-heading font-bold text-lg text-slate-800 group-hover:text-teal-700">HADIS</h3>
+                        <p class="text-xs text-slate-500">Teks & Pengajaran Hadis</p>
+                    </div>
+                </button>
+
+                <button onclick="selectField('Jawi')" class="p-5 bg-white hover:bg-rose-50 rounded-2xl border-2 border-rose-200 hover:border-rose-500 shadow-sm transition-all text-left flex items-center gap-4 group">
+                    <div class="w-14 h-14 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center text-3xl group-hover:scale-105 transition-transform">✍️</div>
+                    <div>
+                        <h3 class="font-heading font-bold text-lg text-slate-800 group-hover:text-rose-700">JAWI</h3>
+                        <p class="text-xs text-slate-500">Kemahiran Membaca & Menulis</p>
+                    </div>
+                </button>
+
+                <button onclick="selectField('Akidah')" class="p-5 bg-white hover:bg-sky-50 rounded-2xl border-2 border-sky-200 hover:border-sky-500 shadow-sm transition-all text-left flex items-center gap-4 group">
+                    <div class="w-14 h-14 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center text-3xl group-hover:scale-105 transition-transform">☪️</div>
+                    <div>
+                        <h3 class="font-heading font-bold text-lg text-slate-800 group-hover:text-sky-700">AKIDAH</h3>
+                        <p class="text-xs text-slate-500">Iman, Asmaul Husna & Rukun</p>
+                    </div>
+                </button>
+
+                <button onclick="selectField('Ibadah')" class="p-5 bg-white hover:bg-purple-50 rounded-2xl border-2 border-purple-200 hover:border-purple-500 shadow-sm transition-all text-left flex items-center gap-4 group">
+                    <div class="w-14 h-14 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center text-3xl group-hover:scale-105 transition-transform">🕌</div>
+                    <div>
+                        <h3 class="font-heading font-bold text-lg text-slate-800 group-hover:text-purple-700">IBADAH</h3>
+                        <p class="text-xs text-slate-500">Bersuci, Solat & Amalan</p>
+                    </div>
+                </button>
+
+                <button onclick="selectField('Sirah')" class="p-5 bg-white hover:bg-amber-50 rounded-2xl border-2 border-amber-200 hover:border-amber-500 shadow-sm transition-all text-left flex items-center gap-4 group">
+                    <div class="w-14 h-14 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-3xl group-hover:scale-105 transition-transform">🌙</div>
+                    <div>
+                        <h3 class="font-heading font-bold text-lg text-slate-800 group-hover:text-amber-700">SIRAH</h3>
+                        <p class="text-xs text-slate-500">Kisah Nabi Muhammad SAW</p>
+                    </div>
+                </button>
+
+                <button onclick="selectField('Adab')" class="p-5 bg-white hover:bg-emerald-50 rounded-2xl border-2 border-emerald-200 hover:border-emerald-500 shadow-sm transition-all text-left flex items-center gap-4 group lg:col-span-2">
+                    <div class="w-14 h-14 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-3xl group-hover:scale-105 transition-transform">🤝</div>
+                    <div>
+                        <h3 class="font-heading font-bold text-lg text-slate-800 group-hover:text-emerald-700">ADAB</h3>
+                        <p class="text-xs text-slate-500">Akhlak Islamiah & Perlakuan Mulia</p>
+                    </div>
+                </button>
+            </div>
+        </section>
+
+        <!-- ==================== SCREEN 5: SENARAI TAJUK ==================== -->
+        <section id="screen-topic_list" class="screen-view hidden">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                <div>
+                    <span id="topicListContextBadge" class="px-3 py-1 bg-emerald-100 text-emerald-800 text-xs font-bold rounded-full">Tahun X • Bidang Y</span>
+                    <h2 class="text-2xl sm:text-3xl font-bold font-heading text-slate-900 mt-2">SENARAI TAJUK PEMBELAJARAN</h2>
+                    <p class="text-slate-500 text-xs mt-0.5">Tajuk berdasarkan Buku Teks Pendidikan Islam KPM</p>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <button id="addTopicBtn" onclick="checkAdminAccessAndAddTopic()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl flex items-center gap-2 shadow-sm transition-colors">
+                        <i class="fa-solid fa-plus"></i>
+                        <span>Tambah Tajuk Baru</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="mb-6 relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                <input type="text" id="topicSearchInput" oninput="filterTopics()" placeholder="Cari tajuk pembelajaran..." class="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50">
+            </div>
+
+            <!-- Topics Container -->
+            <div id="topicsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+
+            <!-- Empty state -->
+            <div id="emptyTopicState" class="hidden text-center py-12 bg-white rounded-2xl border border-dashed border-slate-300">
+                <div class="w-16 h-16 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mx-auto text-2xl mb-3">
+                    <i class="fa-solid fa-folder-open"></i>
+                </div>
+                <h3 class="font-heading text-lg font-bold text-slate-700">Belum Ada Tajuk</h3>
+                <p class="text-xs text-slate-500 mb-4 max-w-md mx-auto">Tajuk bagi bidang ini belum dimasukkan. Guru boleh menambah tajuk baru dalam panel pengurusan.</p>
+                <button onclick="checkAdminAccessAndAddTopic()" class="px-4 py-2 bg-emerald-600 text-white text-xs font-bold rounded-xl hover:bg-emerald-700">
+                    + Tambah Tajuk Sekarang
+                </button>
+            </div>
+        </section>
+
+        <!-- ==================== SCREEN 6: HALAMAN BAHAN TAJUK ==================== -->
+        <section id="screen-topic_detail" class="screen-view hidden">
+            <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <div class="flex flex-wrap items-center gap-2 mb-2">
+                        <span id="detailYearBadge" class="px-2.5 py-1 bg-emerald-100 text-emerald-800 font-bold text-xs rounded-lg">TAHUN --</span>
+                        <span id="detailFieldBadge" class="px-2.5 py-1 bg-amber-100 text-amber-800 font-bold text-xs rounded-lg">BIDANG --</span>
+                    </div>
+                    <h2 id="detailTitle" class="text-2xl sm:text-3xl font-extrabold font-heading text-slate-900">Nama Tajuk</h2>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <button onclick="checkAdminAccessAndEditTopic()" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl flex items-center gap-1.5 transition-colors">
+                        <i class="fa-solid fa-lock text-[10px] text-slate-400"></i>
+                        <i class="fa-solid fa-pen-to-square"></i>
+                        <span>Edit Bahan (Guru)</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Left Column: Video & Lyrics -->
+                <div class="lg:col-span-8 space-y-6">
+                    <div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-5">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="font-heading text-lg font-bold text-slate-800 flex items-center gap-2">
+                                <span class="w-7 h-7 bg-red-100 text-red-600 rounded-lg flex items-center justify-center text-sm">🎬</span>
+                                <span>Video Pembelajaran YouTube</span>
+                            </h3>
+                            <a id="detailYoutubeDirectLink" href="#" target="_blank" class="text-xs font-semibold text-red-600 hover:underline flex items-center gap-1">
+                                <span>Buka di YouTube</span>
+                                <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                            </a>
+                        </div>
+                        
+                        <div class="relative w-full aspect-video bg-slate-900 rounded-xl overflow-hidden shadow-inner">
+                            <iframe id="detailYoutubePlayer" class="w-full h-full border-0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-br from-emerald-500/5 via-teal-500/5 to-emerald-500/10 bg-white rounded-2xl border border-emerald-200/80 shadow-xs p-6">
+                        <div class="flex items-center justify-between mb-4 border-b pb-3 border-emerald-100">
+                            <div class="flex items-center gap-2">
+                                <span class="w-8 h-8 bg-emerald-100 text-emerald-700 rounded-lg flex items-center justify-center text-base font-bold">🎵</span>
+                                <div>
+                                    <h3 class="font-heading text-xl font-bold text-emerald-900">LIRIK LAGU</h3>
+                                    <p id="detailSongTitle" class="text-xs font-semibold text-emerald-700">Tajuk Lagu: --</p>
+                                </div>
+                            </div>
+                            <button onclick="toggleLyricFontSize()" class="px-2.5 py-1 bg-emerald-100 text-emerald-800 text-xs font-semibold rounded-lg hover:bg-emerald-200">
+                                <i class="fa-solid fa-text-height"></i> Saiz Teks
+                            </button>
+                        </div>
+
+                        <div id="detailLyricsBox" class="lyric-text text-slate-800 text-base sm:text-lg font-medium whitespace-pre-line bg-white/80 p-6 rounded-xl border border-emerald-100 shadow-xs font-sans">
+                        </div>
+                    </div>
+
+                    <div class="bg-amber-50/50 rounded-2xl border border-amber-200/80 p-6">
+                        <h3 class="font-heading text-lg font-bold text-amber-900 flex items-center gap-2 mb-3">
+                            <span class="w-7 h-7 bg-amber-200 text-amber-800 rounded-lg flex items-center justify-center text-sm">💡</span>
+                            <span>CARA MENGGUNAKAN LAGU DALAM PDP</span>
+                        </h3>
+                        <div id="detailSongUsage" class="text-sm text-slate-700 leading-relaxed whitespace-pre-line bg-white p-4 rounded-xl border border-amber-200">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Quizizz & SK/SP -->
+                <div class="lg:col-span-4 space-y-6">
+                    <div class="bg-gradient-to-br from-purple-600 to-indigo-700 rounded-2xl p-6 text-white shadow-lg text-center">
+                        <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-3 backdrop-blur-md">
+                            📝
+                        </div>
+                        <h3 class="font-heading text-xl font-bold mb-1">KUIZ QUIZIZZ</h3>
+                        <p class="text-xs text-purple-200 mb-5">Uji kefahaman murid secara interaktif & menyeronokkan!</p>
+                        
+                        <a id="detailQuizizzBtn" href="#" target="_blank" class="block w-full py-3.5 bg-yellow-400 hover:bg-yellow-300 text-slate-900 font-heading font-extrabold text-base rounded-xl shadow-md transition-all">
+                            MULA KUIZ
+                        </a>
+                    </div>
+
+                    <div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-5">
+                        <h3 class="font-heading text-base font-bold text-slate-800 flex items-center gap-2 mb-4 border-b pb-2">
+                            <span class="w-6 h-6 bg-blue-100 text-blue-700 rounded-md flex items-center justify-center text-xs">📚</span>
+                            <span>STANDARD KURIKULUM (SK & SP)</span>
+                        </h3>
+                        
+                        <div class="space-y-4 text-xs">
+                            <div>
+                                <span class="font-bold text-emerald-700 block mb-1">Standard Kandungan (SK):</span>
+                                <div id="detailSK" class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-slate-700 leading-normal"></div>
+                            </div>
+                            
+                            <div>
+                                <span class="font-bold text-teal-700 block mb-1">Standard Pembelajaran (SP):</span>
+                                <div id="detailSP" class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-slate-700 leading-normal"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== SCREEN 7: PENGURUSAN KANDUNGAN (ADMIN) ==================== -->
+        <section id="screen-admin" class="screen-view hidden">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b pb-4">
+                <div>
+                    <h2 class="text-3xl font-bold font-heading text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-sliders text-emerald-600"></i>
+                        <span>PENGURUSAN KANDUNGAN (PENTADBIR)</span>
+                    </h2>
+                    <p class="text-slate-500 text-xs mt-1">Kemaskini, tambah, atau padam kandungan lagu, pautan Google Form & tetapan PIN</p>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-2">
+                    <button onclick="exportData()" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl flex items-center gap-1.5">
+                        <i class="fa-solid fa-download"></i> Eksport JSON (Backup)
+                    </button>
+
+                    <label class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl flex items-center gap-1.5 cursor-pointer">
+                        <i class="fa-solid fa-upload"></i> Import JSON
+                        <input type="file" id="importJsonInput" accept=".json" onchange="importData(event)" class="hidden">
+                    </label>
+
+                    <button onclick="openConfirmModal('reset')" class="px-3.5 py-2 bg-red-50 hover:bg-red-100 text-red-700 font-bold text-xs rounded-xl flex items-center gap-1.5 border border-red-200">
+                        <i class="fa-solid fa-rotate-left"></i> Reset Kandungan Asal
+                    </button>
+                </div>
+            </div>
+
+            <!-- Global Admin Settings Panel (Google Form Link & PIN) -->
+            <div class="bg-gradient-to-r from-emerald-50 via-teal-50 to-sky-50 p-5 rounded-2xl border border-emerald-200 mb-6 shadow-xs">
+                <h3 class="font-heading font-bold text-slate-800 text-sm mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-gear text-emerald-600"></i>
+                    <span>TETAPAN APLIKASI & MAKLUM BALAS</span>
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Pautan Google Form Maklum Balas Guru/Murid:</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="adminGoogleFormInput" placeholder="https://forms.google.com/..." class="w-full text-xs p-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500">
+                            <button onclick="saveGlobalSettings()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl">
+                                Simpan
+                            </button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Tukar PIN Keselamatan Admin (Semasa: <span id="currentPinDisplay" class="text-emerald-700 font-mono font-bold">1234</span>):</label>
+                        <div class="flex gap-2">
+                            <input type="password" id="adminNewPinInput" placeholder="4 Digit PIN Baru" maxlength="6" class="w-full text-xs p-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 font-mono">
+                            <button onclick="saveNewAdminPin()" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl">
+                                Tukar PIN
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Topic Selection & Filter Panel -->
+                <div class="lg:col-span-4 space-y-4">
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="font-heading font-bold text-slate-800 text-sm">Pilih Tajuk Untuk Diedit</h3>
+                            <button onclick="resetAdminForm()" class="text-xs text-emerald-700 font-bold hover:underline">+ Tajuk Baru</button>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2 mb-3">
+                            <div>
+                                <label class="text-[11px] font-bold text-slate-500">Tahun:</label>
+                                <select id="adminFilterYear" onchange="renderAdminTopicList()" class="w-full text-xs p-2 bg-slate-50 border border-slate-200 rounded-lg">
+                                    <option value="1">Tahun 1</option>
+                                    <option value="2">Tahun 2</option>
+                                    <option value="3">Tahun 3</option>
+                                    <option value="4">Tahun 4</option>
+                                    <option value="5">Tahun 5</option>
+                                    <option value="6">Tahun 6</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-[11px] font-bold text-slate-500">Bidang:</label>
+                                <select id="adminFilterField" onchange="renderAdminTopicList()" class="w-full text-xs p-2 bg-slate-50 border border-slate-200 rounded-lg">
+                                    <option value="Al-Quran">Al-Quran</option>
+                                    <option value="Hadis">Hadis</option>
+                                    <option value="Jawi">Jawi</option>
+                                    <option value="Akidah">Akidah</option>
+                                    <option value="Ibadah">Ibadah</option>
+                                    <option value="Sirah">Sirah</option>
+                                    <option value="Adab">Adab</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div id="adminTopicList" class="space-y-2 max-h-[450px] overflow-y-auto pr-1 custom-scrollbar"></div>
+                    </div>
+                </div>
+
+                <!-- Topic Form Editor Panel -->
+                <div class="lg:col-span-8">
+                    <div id="adminFormContainer" class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
+                        <div class="flex items-center justify-between mb-6 border-b pb-3">
+                            <h3 id="adminFormTitle" class="font-heading text-lg font-bold text-slate-800">Borang Tambah / Edit Tajuk</h3>
+                            <div class="flex items-center gap-2">
+                                <button id="deleteTopicBtn" type="button" onclick="openConfirmModal('delete')" class="hidden px-3 py-1.5 bg-red-100 hover:bg-red-200 text-red-800 text-xs font-bold rounded-lg transition-colors">
+                                    <i class="fa-solid fa-trash"></i> Padam Tajuk
+                                </button>
+                            </div>
+                        </div>
+
+                        <form id="topicEditForm" onsubmit="handleSaveTopic(event)" class="space-y-4">
+                            <input type="hidden" id="editTopicId">
+                            
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Tahun Persekolahan *</label>
+                                    <select id="editYear" required class="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500">
+                                        <option value="1">Tahun 1</option>
+                                        <option value="2">Tahun 2</option>
+                                        <option value="3">Tahun 3</option>
+                                        <option value="4">Tahun 4</option>
+                                        <option value="5">Tahun 5</option>
+                                        <option value="6">Tahun 6</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Bidang Pendidikan Islam *</label>
+                                    <select id="editField" required class="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500">
+                                        <option value="Al-Quran">Al-Quran</option>
+                                        <option value="Hadis">Hadis</option>
+                                        <option value="Jawi">Jawi</option>
+                                        <option value="Akidah">Akidah</option>
+                                        <option value="Ibadah">Ibadah</option>
+                                        <option value="Sirah">Sirah</option>
+                                        <option value="Adab">Adab</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-1">Nama Tajuk Pembelajaran *</label>
+                                <input type="text" id="editTitle" required placeholder="Contoh: Perkara Yang Membatalkan Solat" class="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500">
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Link Video YouTube</label>
+                                    <input type="text" id="editYoutube" placeholder="https://www.youtube.com/watch?v=..." class="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Link Kuiz Quizizz</label>
+                                    <input type="text" id="editQuizizz" placeholder="https://quizizz.com/join?..." class="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-1">Tajuk Lagu</label>
+                                <input type="text" id="editSongTitle" placeholder="Contoh: Lagu Syarat Solat" class="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-1">Lirik Lagu</label>
+                                <textarea id="editLyrics" rows="6" placeholder="Masukkan lirik lagu di sini..." class="w-full text-xs p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 font-sans leading-relaxed"></textarea>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-1">Cara Menggunakan Lagu (Panduan PdP Guru)</label>
+                                <textarea id="editUsage" rows="3" placeholder="Penerangan ringkas cara lagu diperkenalkan & digunakan semasa kelas..." class="w-full text-xs p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500"></textarea>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Standard Kandungan (SK)</label>
+                                    <textarea id="editSK" rows="2" placeholder="Contoh: 4.2 Memahami syarat-syarat..." class="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500"></textarea>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Standard Pembelajaran (SP)</label>
+                                    <textarea id="editSP" rows="2" placeholder="Contoh: 4.2.1 Menyebut syarat wajib..." class="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="pt-4 flex items-center justify-end gap-3 border-t">
+                                <button type="button" onclick="resetAdminForm()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl">
+                                    Batal
+                                </button>
+                                <button type="submit" class="px-6 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-md transition-colors">
+                                    <i class="fa-solid fa-floppy-disk mr-1"></i> Simpan Kandungan
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== SCREEN 8: MAKLUM BALAS ==================== -->
+        <section id="screen-feedback" class="screen-view hidden max-w-2xl mx-auto">
+            <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-md">
+                <div class="text-center mb-6">
+                    <div class="w-16 h-16 bg-purple-100 text-purple-600 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-3">
+                        💬
+                    </div>
+                    <h2 class="text-3xl font-bold font-heading text-slate-900">MAKLUM BALAS</h2>
+                    <p class="text-slate-600 text-sm mt-1">Adakah aplikasi MELISA membantu anda mengajar atau belajar?</p>
+                </div>
+
+                <form onsubmit="handleFeedbackSubmit(event)" class="space-y-6">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-3 text-center uppercase tracking-wider">Pilih Tahap Kepuasan:</label>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                            <label class="cursor-pointer">
+                                <input type="radio" name="feedbackRating" value="Sangat Membantu" class="peer hidden" checked>
+                                <div class="p-4 text-center rounded-2xl border-2 border-slate-200 peer-checked:border-purple-500 peer-checked:bg-purple-50/50 hover:bg-slate-50 transition-all">
+                                    <div class="text-3xl mb-1">😊</div>
+                                    <div class="text-xs font-bold text-slate-700">Sangat Membantu</div>
+                                </div>
+                            </label>
+
+                            <label class="cursor-pointer">
+                                <input type="radio" name="feedbackRating" value="Membantu" class="peer hidden">
+                                <div class="p-4 text-center rounded-2xl border-2 border-slate-200 peer-checked:border-purple-500 peer-checked:bg-purple-50/50 hover:bg-slate-50 transition-all">
+                                    <div class="text-3xl mb-1">🙂</div>
+                                    <div class="text-xs font-bold text-slate-700">Membantu</div>
+                                </div>
+                            </label>
+
+                            <label class="cursor-pointer">
+                                <input type="radio" name="feedbackRating" value="Kurang Membantu" class="peer hidden">
+                                <div class="p-4 text-center rounded-2xl border-2 border-slate-200 peer-checked:border-purple-500 peer-checked:bg-purple-50/50 hover:bg-slate-50 transition-all">
+                                    <div class="text-3xl mb-1">😐</div>
+                                    <div class="text-xs font-bold text-slate-700">Kurang Membantu</div>
+                                </div>
+                            </label>
+
+                            <label class="cursor-pointer">
+                                <input type="radio" name="feedbackRating" value="Tidak Membantu" class="peer hidden">
+                                <div class="p-4 text-center rounded-2xl border-2 border-slate-200 peer-checked:border-purple-500 peer-checked:bg-purple-50/50 hover:bg-slate-50 transition-all">
+                                    <div class="text-3xl mb-1">🙁</div>
+                                    <div class="text-xs font-bold text-slate-700">Tidak Membantu</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Cadangan / Komen Anda:</label>
+                        <textarea id="feedbackComment" rows="4" placeholder="Tuliskan pandangan atau cadangan penambahbaikan..." class="w-full text-xs p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-purple-500"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full py-3.5 bg-purple-600 hover:bg-purple-700 text-white font-heading font-bold text-base rounded-xl shadow-md transition-colors">
+                        HANTAR MAKLUM BALAS
+                    </button>
+                </form>
+
+                <div class="mt-8 pt-6 border-t border-slate-200 text-center">
+                    <p class="text-xs text-slate-500 mb-3">Atau isi borang maklum balas rasmi melalui Google Form:</p>
+                    <a id="externalGoogleFormBtn" href="https://forms.google.com" target="_blank" class="inline-flex items-center gap-2 px-5 py-2.5 bg-white border-2 border-purple-200 hover:border-purple-500 text-purple-700 font-bold text-xs rounded-xl transition-all shadow-xs">
+                        <i class="fa-brands fa-google"></i>
+                        <span>ISI BORANG MAKLUM BALAS (GOOGLE FORM)</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ADMIN PIN MODAL -->
+    <div id="pinModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl border border-slate-100">
+            <div class="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-3">
+                🔑
+            </div>
+            <h3 class="font-heading text-xl font-bold text-slate-900 mb-1">Masukkkan PIN Pentadbir</h3>
+            <p class="text-xs text-slate-500 mb-4">Pengurusan kandungan khusus untuk Guru / Pentadbir (PIN laluan asal: <strong class="text-emerald-700 font-mono">1234</strong>)</p>
+            
+            <input type="password" id="pinInput" maxlength="6" placeholder="Masukkan PIN" class="w-full text-center text-2xl tracking-widest font-mono p-3 bg-slate-50 border border-slate-200 rounded-2xl mb-4 focus:ring-2 focus:ring-emerald-500">
+            
+            <p id="pinErrorText" class="text-xs text-red-500 font-bold hidden mb-3">PIN tidak sah. Sila cuba lagi.</p>
+
+            <div class="flex items-center gap-2">
+                <button onclick="closePinModal()" class="w-1/2 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl">
+                    Batal
+                </button>
+                <button onclick="verifyAdminPin()" class="w-1/2 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl">
+                    Sahkan PIN
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONFIRMATION MODAL (PADAM / RESET) -->
+    <div id="confirmModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl border border-slate-100">
+            <div id="confirmIcon" class="w-14 h-14 bg-red-100 text-red-600 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-3">
+                ⚠️
+            </div>
+            <h3 id="confirmTitle" class="font-heading text-xl font-bold text-slate-900 mb-1">Pengesahan</h3>
+            <p id="confirmMessage" class="text-xs text-slate-500 mb-6">Adakah anda pasti mahu meneruskan tindakan ini?</p>
+            
+            <div class="flex items-center gap-2">
+                <button onclick="closeConfirmModal()" class="w-1/2 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl">
+                    Batal
+                </button>
+                <button id="confirmExecuteBtn" onclick="executeConfirmedAction()" class="w-1/2 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-xl">
+                    Teruskan
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toastMessage" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3 border border-slate-700">
+            <span id="toastIcon">✨</span>
+            <span id="toastText" class="text-xs font-semibold">Mesej berjaya</span>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-white border-t border-slate-200 py-6 mt-12 text-center text-xs text-slate-500">
+        <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div class="flex items-center gap-2">
+                <span class="font-heading font-bold text-emerald-700 text-sm">MELISA</span>
+                <span>• Melodi Islam Anak-Anak</span>
+            </div>
+            <p>© Pendidikan Islam KPM Sekolah Rendah. Belajar, Bernyanyi, Mengingati.</p>
+        </div>
+    </footer>
+
+    <script>
+        /* =========================================================================
+           1. DATA KANDUNGAN (MELISA CONTENT DATA)
+           -------------------------------------------------------------------------
+           Guru boleh menambah, mengedit, atau menukar kandungan di bawah
+           sama ada secara terus dalam kod ini ATAU menggunakan Panel Admin!
+           ========================================================================= */
+
+        const DEFAULT_CONFIG = {
+            adminPin: '1234',
+            googleFormUrl: 'https://forms.google.com'
+        };
+
+        const DEFAULT_TOPICS = [
+            // TAHUN 1
+            {
+                id: 't1_ibadah_rukunislam',
+                year: 1,
+                field: 'Ibadah',
+                title: 'Rukun Islam 5 Perkara',
+                youtube: 'https://www.youtube.com/watch?v=kYJ7q36M15E',
+                songTitle: 'Lagu Mari Mengenal Rukun Islam',
+                lyrics: `Rukun Islam ada lima perkara,
+Pertama: Mengucap Dua Kalimah Syahadah,
+Kedua: Mendirikan Solat lima waktu,
+Ketiga: Berpuasa di bulan Ramadan.
+
+Keempat: Menunaikan Zakat harta dan fitrah,
+Kelima: Mengerjakan Haji di Makkah Al-Mukarramah.
+
+Mari kawan kita amalkan bersama,
+Rukun Islam tiang agama kita!`,
+                usage: `1. Guru memperdengarkan lagu sambil menunjukkan pergerakan tangan mengikut nombor rukun.
+2. Murid mengikut guru menyanyi secara berkumpulan.
+3. Fokuskan sebutan perkataan 'Syahadah', 'Ramadan', dan 'Makkah Al-Mukarramah'.`,
+                sk: '4.1 Memahami dan mengamalkan Rukun Islam.',
+                sp: '4.1.1 Menyebut Rukun Islam secara berurutan.',
+                quizizz: 'https://quizizz.com/join'
+            },
+            {
+                id: 't1_akidah_rukuniman',
+                year: 1,
+                field: 'Akidah',
+                title: 'Rukun Iman 6 Perkara',
+                youtube: 'https://www.youtube.com/watch?v=kYJ7q36M15E',
+                songTitle: 'Lagu Rukun Iman Suara Hati',
+                lyrics: `Rukun Iman ada enam perkara,
+Beriman kepada Allah yang Maha Esa,
+Kedua Malaikat, Ketiga Kitab-Nya,
+Keempat Para Rasul utusan-Nya.
+
+Kelima Hari Kiamat yang pasti tiba,
+Keenam Qada dan Qadar ketentuan-Nya.
+Peganglah erat dalam dada kita!`,
+                usage: `1. Nyanyikan mengikut irama lagu kanak-kanak mudah.
+2. Murid menyebut 6 Rukun Iman dengan lancar.`,
+                sk: '3.1 Memahami asas Rukun Iman.',
+                sp: '3.1.1 Menyebut enam Rukun Iman.',
+                quizizz: 'https://quizizz.com/join'
+            },
+            // TAHUN 2
+            {
+                id: 't2_akidah_asmaulhusna',
+                year: 2,
+                field: 'Akidah',
+                title: 'Asmaul Husna: Al-Ahad & Al-Khaliq',
+                youtube: 'https://www.youtube.com/watch?v=kYJ7q36M15E',
+                songTitle: 'Lagu Pencipta Alam',
+                lyrics: `Allah Al-Ahad Allah Yang Maha Esa,
+Tiada Tuhan melainkan Dia.
+Allah Al-Khaliq Maha Pencipta,
+Mencipta bumi, langit dan suria.
+
+Hebatnya Allah Pencipta alam semesta!`,
+                usage: `1. Guru meminta murid memerhati alam sekitar sebelum menyanyikan lagu.
+2. Hubungkan sifat Al-Khaliq dengan penciptaan alam.`,
+                sk: '3.2 Memahami dan meyakini nama Allah Al-Ahad dan Al-Khaliq.',
+                sp: '3.2.1 Menyatakan maksud Al-Ahad dan Al-Khaliq.',
+                quizizz: 'https://quizizz.com/join'
+            },
+            // TAHUN 3
+            {
+                id: 't3_ibadah_syaratsolat',
+                year: 3,
+                field: 'Ibadah',
+                title: 'Syarat Wajib dan Syarat Sah Solat',
+                youtube: 'https://www.youtube.com/watch?v=kYJ7q36M15E',
+                songTitle: 'Lagu Solat Sempurna',
+                lyrics: `Syarat wajib solat tiga perkara:
+Islam, baligh dan berakal jua.
+Syarat sah solat mari ingat bersama,
+Suci dari hadas dan najis sedia.
+
+Menutup aurat dengan sempurna,
+Menghadap kiblat, masuk waktunya!`,
+                usage: `1. Ulangi bahagian syarat sah solat sebelum amali solat.
+2. Penekanan pada kiblat dan kebersihan pakaian.`,
+                sk: '4.2 Memahami syarat wajib dan syarat sah solat.',
+                sp: '4.2.1 Menyebut syarat wajib dan syarat sah solat.',
+                quizizz: 'https://quizizz.com/join'
+            },
+            {
+                id: 't3_quran_surah_at_tin',
+                year: 3,
+                field: 'Al-Quran',
+                title: 'Kefahaman Surah At-Tin',
+                youtube: 'https://www.youtube.com/watch?v=kYJ7q36M15E',
+                songTitle: 'Lagu Indahnya Surah At-Tin',
+                lyrics: `Buah Tin dan buah Zaitun,
+Bukit Sina tempat yang agung,
+Manusia dicipta sebaik bentuk,
+Beriman beramal tiada terputus.`,
+                usage: `1. Nyanyian santai untuk mengingat pengajaran Surah At-Tin.`,
+                sk: '1.4 Memahami dan mengamalkan Surah At-Tin.',
+                sp: '1.4.1 Menyatakan pengajaran Surah At-Tin.',
+                quizizz: 'https://quizizz.com/join'
+            },
+            // TAHUN 4
+            {
+                id: 't4_quran_surah_alqariah',
+                year: 4,
+                field: 'Al-Quran',
+                title: 'Surah Al-Qari\'ah',
+                youtube: 'https://www.youtube.com/watch?v=kYJ7q36M15E',
+                songTitle: 'Melodi Surah Al-Qari\'ah',
+                lyrics: `Al-Qari'ah hari kiamat yang dahsyat,
+Manusia berterbangan bagai kelekatu,
+Gunung-ganang hancur bagai bulu ditiup,
+Timbangan berat kebaikan mendapat bahagia!`,
+                usage: `1. Gunakan irama ketukan untuk menghayati maksud ayat.`,
+                sk: '1.3 Membaca dan menghafal Surah Al-Qari\'ah.',
+                sp: '1.3.1 Membaca Surah Al-Qari\'ah dengan tajwid yang betul.',
+                quizizz: 'https://quizizz.com/join'
+            },
+            // TAHUN 5
+            {
+                id: 't5_adab_jualbeli',
+                year: 5,
+                field: 'Adab',
+                title: 'Adab Berjual Beli',
+                youtube: 'https://www.youtube.com/watch?v=kYJ7q36M15E',
+                songTitle: 'Lagu Peniaga Jujur',
+                lyrics: `Bercakap jujur tidak menipu,
+Menimbang sukat dengan saksama.
+Barang yang elok halal sentiasa,
+Senyum mesra amalan mulia.`,
+                usage: `1. Dijadikan lagu latar semasa aktiviti simulasi jualan.`,
+                sk: '6.3 Memahami dan mengamalkan adab berjual beli.',
+                sp: '6.3.1 Menyebut adab berjual beli mengikut sunnah.',
+                quizizz: 'https://quizizz.com/join'
+            },
+            // TAHUN 6
+            {
+                id: 't6_sirah_madinah',
+                year: 6,
+                field: 'Sirah',
+                title: 'Pembentukan Negara Madinah',
+                youtube: 'https://www.youtube.com/watch?v=kYJ7q36M15E',
+                songTitle: 'Lagu Madinah Munawwarah',
+                lyrics: `Rasulullah hijrah ke Madinah,
+Persaudarakan Ansar dan Muhajirin.
+Bina masjid pusat ibadah,
+Piagam Madinah undang-undang adil.`,
+                usage: `1. Nyanyian berkumpulan untuk mengingati kronologi pembentukan Madinah.`,
+                sk: '5.2 Memahami peristiwa pembentukan Negara Madinah.',
+                sp: '5.2.1 Menyatakan iktibar daripada pembentukan Negara Madinah.',
+                quizizz: 'https://quizizz.com/join'
+            }
+        ];
+
+        /* =========================================================================
+           2. REKA BENTUK & FUNGSI APLIKASI (APP LOGIC & STATE MANAGEMENT)
+           ========================================================================= */
+
+        let appState = {
+            role: null, // 'guru' or 'murid'
+            year: 1,
+            field: 'Ibadah',
+            currentTopicId: null,
+            navigationHistory: [],
+            isAdminUnlocked: false,
+            pendingConfirmAction: null,
+            config: { ...DEFAULT_CONFIG },
+            stats: { guruCount: 15, muridCount: 68 }
+        };
+
+        let topicsData = [];
+
+        window.onload = function() {
+            loadConfigFromStorage();
+            loadTopicsFromStorage();
+            loadStatsFromStorage();
+            updateStatsUI();
+            navigateTo('home');
+        };
+
+        function loadConfigFromStorage() {
+            const storedConfig = localStorage.getItem('MELISA_APP_CONFIG');
+            if (storedConfig) {
+                try {
+                    appState.config = { ...DEFAULT_CONFIG, ...JSON.parse(storedConfig) };
+                } catch(e) {
+                    appState.config = { ...DEFAULT_CONFIG };
+                }
+            }
+        }
+
+        function saveConfigToStorage() {
+            localStorage.setItem('MELISA_APP_CONFIG', JSON.stringify(appState.config));
+            updateConfigUI();
+        }
+
+        function updateConfigUI() {
+            const btn = document.getElementById('externalGoogleFormBtn');
+            if (btn) btn.href = appState.config.googleFormUrl || 'https://forms.google.com';
+
+            const adminInput = document.getElementById('adminGoogleFormInput');
+            if (adminInput) adminInput.value = appState.config.googleFormUrl || '';
+
+            const currentPinSpan = document.getElementById('currentPinDisplay');
+            if (currentPinSpan) currentPinSpan.innerText = appState.config.adminPin || '1234';
+        }
+
+        function loadTopicsFromStorage() {
+            const stored = localStorage.getItem('MELISA_TOPICS_DATA');
+            if (stored) {
+                try {
+                    topicsData = JSON.parse(stored);
+                } catch(e) {
+                    topicsData = [...DEFAULT_TOPICS];
+                }
+            } else {
+                topicsData = [...DEFAULT_TOPICS];
+                saveTopicsToStorage();
+            }
+        }
+
+        function saveTopicsToStorage() {
+            localStorage.setItem('MELISA_TOPICS_DATA', JSON.stringify(topicsData));
+        }
+
+        function loadStatsFromStorage() {
+            const storedStats = localStorage.getItem('MELISA_STATS');
+            if (storedStats) {
+                try {
+                    appState.stats = JSON.parse(storedStats);
+                } catch(e) {}
+            }
+        }
+
+        function saveStatsToStorage() {
+            localStorage.setItem('MELISA_STATS', JSON.stringify(appState.stats));
+            updateStatsUI();
+        }
+
+        function updateStatsUI() {
+            const guru = appState.stats.guruCount || 0;
+            const murid = appState.stats.muridCount || 0;
+            const total = guru + murid;
+
+            document.getElementById('statGuruCount').innerText = guru;
+            document.getElementById('statMuridCount').innerText = murid;
+            document.getElementById('statTotalCount').innerText = total;
+
+            updateConfigUI();
+        }
+
+        /* NAVIGATION CONTROL */
+        function navigateTo(screenId, pushHistory = true) {
+            const screens = document.querySelectorAll('.screen-view');
+            screens.forEach(s => s.classList.add('hidden'));
+
+            const targetScreen = document.getElementById(`screen-${screenId}`);
+            if (targetScreen) {
+                targetScreen.classList.remove('hidden');
+            }
+
+            if (pushHistory) {
+                appState.navigationHistory.push(screenId);
+            }
+
+            updateBreadcrumbUI(screenId);
+
+            if (screenId === 'field_select') {
+                document.getElementById('selectedYearLabel').innerText = `Tahun ${appState.year}`;
+            } else if (screenId === 'topic_list') {
+                renderTopicList();
+            } else if (screenId === 'admin') {
+                renderAdminTopicList();
+                updateConfigUI();
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function goBack() {
+            if (appState.navigationHistory.length > 1) {
+                appState.navigationHistory.pop();
+                const previousScreen = appState.navigationHistory[appState.navigationHistory.length - 1];
+                navigateTo(previousScreen, false);
+            } else {
+                navigateTo('home', false);
+            }
+        }
+
+        function updateBreadcrumbUI(currentScreen) {
+            const bar = document.getElementById('breadcrumbBar');
+            const list = document.getElementById('breadcrumbList');
+
+            if (currentScreen === 'home') {
+                bar.classList.add('hidden');
+                return;
+            }
+
+            bar.classList.remove('hidden');
+
+            let breadcrumbHTML = `<button onclick="navigateTo('home')" class="hover:text-emerald-700 font-semibold">Utama</button>`;
+
+            if (appState.role) {
+                breadcrumbHTML += `<i class="fa-solid fa-chevron-right text-[9px] text-slate-400"></i>`;
+                breadcrumbHTML += `<span class="capitalize font-medium text-slate-700">${appState.role}</span>`;
+            }
+
+            if (['field_select', 'topic_list', 'topic_detail'].includes(currentScreen)) {
+                breadcrumbHTML += `<i class="fa-solid fa-chevron-right text-[9px] text-slate-400"></i>`;
+                breadcrumbHTML += `<button onclick="navigateTo('year_select')" class="hover:text-emerald-700">Tahun ${appState.year}</button>`;
+            }
+
+            if (['topic_list', 'topic_detail'].includes(currentScreen)) {
+                breadcrumbHTML += `<i class="fa-solid fa-chevron-right text-[9px] text-slate-400"></i>`;
+                breadcrumbHTML += `<button onclick="navigateTo('field_select')" class="hover:text-emerald-700">${appState.field}</button>`;
+            }
+
+            if (currentScreen === 'topic_detail' && appState.currentTopicId) {
+                const currentTopic = topicsData.find(t => t.id === appState.currentTopicId);
+                if (currentTopic) {
+                    breadcrumbHTML += `<i class="fa-solid fa-chevron-right text-[9px] text-slate-400"></i>`;
+                    breadcrumbHTML += `<span class="font-bold text-emerald-800 truncate max-w-[150px] inline-block">${currentTopic.title}</span>`;
+                }
+            } else if (currentScreen === 'admin') {
+                breadcrumbHTML += `<i class="fa-solid fa-chevron-right text-[9px] text-slate-400"></i>`;
+                breadcrumbHTML += `<span class="font-bold text-emerald-800">Pengurusan Kandungan</span>`;
+            } else if (currentScreen === 'feedback') {
+                breadcrumbHTML += `<i class="fa-solid fa-chevron-right text-[9px] text-slate-400"></i>`;
+                breadcrumbHTML += `<span class="font-bold text-purple-800">Maklum Balas</span>`;
+            }
+
+            list.innerHTML = breadcrumbHTML;
+        }
+
+        /* ADMIN PIN AUTHORIZATION SYSTEM */
+        function checkAdminAccessAndNavigate() {
+            if (appState.isAdminUnlocked) {
+                navigateTo('admin');
+            } else {
+                openPinModal(() => navigateTo('admin'));
+            }
+        }
+
+        function checkAdminAccessAndAddTopic() {
+            if (appState.isAdminUnlocked) {
+                navigateTo('admin');
+                resetAdminForm();
+                document.getElementById('editYear').value = appState.year;
+                document.getElementById('editField').value = appState.field;
+            } else {
+                openPinModal(() => {
+                    navigateTo('admin');
+                    resetAdminForm();
+                    document.getElementById('editYear').value = appState.year;
+                    document.getElementById('editField').value = appState.field;
+                });
+            }
+        }
+
+        function checkAdminAccessAndEditTopic() {
+            if (!appState.currentTopicId) return;
+            if (appState.isAdminUnlocked) {
+                navigateTo('admin');
+                populateAdminForm(appState.currentTopicId);
+            } else {
+                openPinModal(() => {
+                    navigateTo('admin');
+                    populateAdminForm(appState.currentTopicId);
+                });
+            }
+        }
+
+        let onPinSuccessCallback = null;
+        function openPinModal(callback) {
+            onPinSuccessCallback = callback;
+            document.getElementById('pinInput').value = '';
+            document.getElementById('pinErrorText').classList.add('hidden');
+            document.getElementById('pinModal').classList.remove('hidden');
+            setTimeout(() => document.getElementById('pinInput').focus(), 100);
+        }
+
+        function closePinModal() {
+            document.getElementById('pinModal').classList.add('hidden');
+            onPinSuccessCallback = null;
+        }
+
+        function verifyAdminPin() {
+            const entered = document.getElementById('pinInput').value.trim();
+            const correctPin = appState.config.adminPin || '1234';
+
+            if (entered === correctPin) {
+                appState.isAdminUnlocked = true;
+                closePinModal();
+                showToast('PIN Sah. Mod Pentadbir diaktifkan!', '🔓');
+                if (onPinSuccessCallback) onPinSuccessCallback();
+            } else {
+                document.getElementById('pinErrorText').classList.remove('hidden');
+            }
+        }
+
+        function saveNewAdminPin() {
+            const newPin = document.getElementById('adminNewPinInput').value.trim();
+            if (newPin.length < 4) {
+                showToast('Sila masukkan sekurang-kurangnya 4 digit PIN.', '⚠️');
+                return;
+            }
+            appState.config.adminPin = newPin;
+            saveConfigToStorage();
+            document.getElementById('adminNewPinInput').value = '';
+            showToast('PIN Pentadbir berjaya dikemaskini!', '🔑');
+        }
+
+        function saveGlobalSettings() {
+            const url = document.getElementById('adminGoogleFormInput').value.trim();
+            if (!url.startsWith('http')) {
+                showToast('Sila masukkan URL Google Form yang sah.', '⚠️');
+                return;
+            }
+            appState.config.googleFormUrl = url;
+            saveConfigToStorage();
+            showToast('Pautan Google Form disimpan!', '✅');
+        }
+
+        /* SELECTION HANDLERS */
+        function selectRole(role) {
+            appState.role = role;
+            
+            if (role === 'guru') {
+                appState.stats.guruCount = (appState.stats.guruCount || 0) + 1;
+            } else if (role === 'murid') {
+                appState.stats.muridCount = (appState.stats.muridCount || 0) + 1;
+            }
+            saveStatsToStorage();
+
+            const badge = document.getElementById('userBadge');
+            const icon = document.getElementById('userBadgeIcon');
+            const text = document.getElementById('userBadgeText');
+
+            badge.classList.remove('hidden');
+            badge.classList.add('flex');
+            
+            if (role === 'guru') {
+                icon.innerText = '👨‍🏫';
+                text.innerText = 'GURU';
+                badge.className = 'flex items-center gap-1.5 px-3 py-1 bg-amber-50 border border-amber-200 text-amber-800 text-xs font-bold rounded-full';
+            } else {
+                icon.innerText = '🧒';
+                text.innerText = 'MURID';
+                badge.className = 'flex items-center gap-1.5 px-3 py-1 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold rounded-full';
+            }
+
+            showToast(`Peranan dipilih: ${role.toUpperCase()}`, '🎉');
+            navigateTo('year_select');
+        }
+
+        function selectYear(yearNum) {
+            appState.year = parseInt(yearNum);
+            navigateTo('field_select');
+        }
+
+        function selectField(fieldName) {
+            appState.field = fieldName;
+            navigateTo('topic_list');
+        }
+
+        /* TOPIC RENDERING */
+        function renderTopicList() {
+            const badge = document.getElementById('topicListContextBadge');
+            badge.innerText = `Tahun ${appState.year} • Bidang ${appState.field}`;
+
+            const container = document.getElementById('topicsContainer');
+            const emptyState = document.getElementById('emptyTopicState');
+            
+            const filtered = topicsData.filter(t => t.year == appState.year && t.field.toLowerCase() === appState.field.toLowerCase());
+
+            if (filtered.length === 0) {
+                container.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            
+            let html = '';
+            filtered.forEach(topic => {
+                html += `
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200/90 hover:border-emerald-500 shadow-xs hover:shadow-md transition-all flex flex-col justify-between group">
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="px-2.5 py-0.5 bg-emerald-50 text-emerald-700 text-[11px] font-bold rounded-md">
+                                    <i class="fa-solid fa-music mr-1"></i> ${topic.songTitle || 'Mempunyai Lagu'}
+                                </span>
+                            </div>
+                            <h3 class="font-heading font-bold text-lg text-slate-800 group-hover:text-emerald-700 mb-2 leading-snug">
+                                ${topic.title}
+                            </h3>
+                            <p class="text-xs text-slate-500 line-clamp-2 mb-4 font-normal">
+                                ${topic.lyrics ? topic.lyrics.substring(0, 90) + '...' : 'Tiada lirik dimasukkan.'}
+                            </p>
+                        </div>
+
+                        <div class="flex items-center justify-between pt-3 border-t border-slate-100">
+                            <span class="text-[11px] font-semibold text-slate-400 flex items-center gap-1">
+                                <i class="fa-solid fa-video text-red-500"></i> Video & Kuiz
+                            </span>
+                            <button onclick="openTopicDetail('${topic.id}')" class="px-4 py-2 bg-emerald-600 group-hover:bg-emerald-700 text-white font-heading font-bold text-xs rounded-xl transition-colors flex items-center gap-1.5 shadow-xs">
+                                <span>PELAJARI TAJUK</span>
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function filterTopics() {
+            const query = document.getElementById('topicSearchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('#topicsContainer > div');
+            
+            cards.forEach(card => {
+                const text = card.innerText.toLowerCase();
+                if (text.includes(query)) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        }
+
+        function openTopicDetail(topicId) {
+            const topic = topicsData.find(t => t.id === topicId);
+            if (!topic) return;
+
+            appState.currentTopicId = topicId;
+
+            document.getElementById('detailYearBadge').innerText = `TAHUN ${topic.year}`;
+            document.getElementById('detailFieldBadge').innerText = `BIDANG ${topic.field.toUpperCase()}`;
+            document.getElementById('detailTitle').innerText = topic.title;
+
+            const iframe = document.getElementById('detailYoutubePlayer');
+            const directLink = document.getElementById('detailYoutubeDirectLink');
+            const embedUrl = getYoutubeEmbedUrl(topic.youtube);
+
+            iframe.src = embedUrl;
+            directLink.href = topic.youtube || '#';
+
+            document.getElementById('detailSongTitle').innerText = `Tajuk Lagu: ${topic.songTitle || topic.title}`;
+            document.getElementById('detailLyricsBox').innerText = topic.lyrics || 'Tiada lirik lagu dimasukkan untuk tajuk ini.';
+            document.getElementById('detailSongUsage').innerText = topic.usage || 'Tiada panduan penggunaan lagu spesifik.';
+
+            document.getElementById('detailSK').innerText = topic.sk || 'Standard Kandungan belum ditetapkan.';
+            document.getElementById('detailSP').innerText = topic.sp || 'Standard Pembelajaran belum ditetapkan.';
+
+            const quizBtn = document.getElementById('detailQuizizzBtn');
+            quizBtn.href = topic.quizizz || '#';
+
+            navigateTo('topic_detail');
+        }
+
+        function getYoutubeEmbedUrl(url) {
+            if (!url) return 'about:blank';
+            let videoId = '';
+            
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            const match = url.match(regExp);
+
+            if (match && match[2].length === 11) {
+                videoId = match[2];
+                return `https://www.youtube.com/embed/${videoId}?autoplay=0&rel=0`;
+            }
+            return url;
+        }
+
+        let isLargeFont = false;
+        function toggleLyricFontSize() {
+            const lyricBox = document.getElementById('detailLyricsBox');
+            if (isLargeFont) {
+                lyricBox.classList.remove('text-2xl');
+                lyricBox.classList.add('text-base', 'sm:text-lg');
+                isLargeFont = false;
+            } else {
+                lyricBox.classList.remove('text-base', 'sm:text-lg');
+                lyricBox.classList.add('text-2xl');
+                isLargeFont = true;
+            }
+        }
+
+        /* ADMIN FORM OPERATIONS */
+        function renderAdminTopicList() {
+            const yearFilter = document.getElementById('adminFilterYear').value;
+            const fieldFilter = document.getElementById('adminFilterField').value;
+
+            const listContainer = document.getElementById('adminTopicList');
+            const filtered = topicsData.filter(t => t.year == yearFilter && t.field === fieldFilter);
+
+            if (filtered.length === 0) {
+                listContainer.innerHTML = `<div class="p-3 text-xs text-slate-400 text-center italic">Tiada tajuk untuk pilihan ini</div>`;
+                return;
+            }
+
+            let html = '';
+            filtered.forEach(t => {
+                html += `
+                    <div onclick="populateAdminForm('${t.id}')" class="p-3 bg-slate-50 hover:bg-emerald-50 rounded-xl border border-slate-200 hover:border-emerald-300 cursor-pointer transition-colors flex items-center justify-between group">
+                        <div class="truncate pr-2">
+                            <h4 class="text-xs font-bold text-slate-800 group-hover:text-emerald-700 truncate">${t.title}</h4>
+                            <p class="text-[10px] text-slate-500 truncate">${t.songTitle || 'Tanpa Tajuk Lagu'}</p>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-[10px] text-slate-400 group-hover:text-emerald-600"></i>
+                    </div>
+                `;
+            });
+
+            listContainer.innerHTML = html;
+        }
+
+        function populateAdminForm(topicId) {
+            const topic = topicsData.find(t => t.id === topicId);
+            if (!topic) return;
+
+            document.getElementById('adminFormTitle').innerText = `Edit: ${topic.title}`;
+            document.getElementById('editTopicId').value = topic.id;
+            document.getElementById('editYear').value = topic.year;
+            document.getElementById('editField').value = topic.field;
+            document.getElementById('editTitle').value = topic.title || '';
+            document.getElementById('editYoutube').value = topic.youtube || '';
+            document.getElementById('editQuizizz').value = topic.quizizz || '';
+            document.getElementById('editSongTitle').value = topic.songTitle || '';
+            document.getElementById('editLyrics').value = topic.lyrics || '';
+            document.getElementById('editUsage').value = topic.usage || '';
+            document.getElementById('editSK').value = topic.sk || '';
+            document.getElementById('editSP').value = topic.sp || '';
+
+            document.getElementById('deleteTopicBtn').classList.remove('hidden');
+        }
+
+        function resetAdminForm() {
+            document.getElementById('adminFormTitle').innerText = `Borang Tambah / Edit Tajuk`;
+            document.getElementById('editTopicId').value = '';
+            document.getElementById('topicEditForm').reset();
+            document.getElementById('deleteTopicBtn').classList.add('hidden');
+        }
+
+        function handleSaveTopic(event) {
+            event.preventDefault();
+
+            const topicId = document.getElementById('editTopicId').value || 'topic_' + Date.now();
+            const year = parseInt(document.getElementById('editYear').value);
+            const field = document.getElementById('editField').value;
+            const title = document.getElementById('editTitle').value.trim();
+            const youtube = document.getElementById('editYoutube').value.trim();
+            const quizizz = document.getElementById('editQuizizz').value.trim();
+            const songTitle = document.getElementById('editSongTitle').value.trim();
+            const lyrics = document.getElementById('editLyrics').value.trim();
+            const usage = document.getElementById('editUsage').value.trim();
+            const sk = document.getElementById('editSK').value.trim();
+            const sp = document.getElementById('editSP').value.trim();
+
+            const existingIndex = topicsData.findIndex(t => t.id === topicId);
+            
+            const newTopicData = { id: topicId, year, field, title, youtube, quizizz, songTitle, lyrics, usage, sk, sp };
+
+            if (existingIndex >= 0) {
+                topicsData[existingIndex] = newTopicData;
+                showToast('Kandungan tajuk berjaya dikemaskini!', '✅');
+            } else {
+                topicsData.push(newTopicData);
+                showToast('Tajuk baharu berjaya ditambah!', '🎉');
+            }
+
+            saveTopicsToStorage();
+            renderAdminTopicList();
+            resetAdminForm();
+        }
+
+        /* MODAL CONFIRMATION HANDLER */
+        function openConfirmModal(actionType) {
+            appState.pendingConfirmAction = actionType;
+            const titleEl = document.getElementById('confirmTitle');
+            const msgEl = document.getElementById('confirmMessage');
+
+            if (actionType === 'delete') {
+                titleEl.innerText = 'Padam Tajuk Ini?';
+                msgEl.innerText = 'Adakah anda pasti mahu memadam tajuk yang sedang dipilih ini?';
+            } else if (actionType === 'reset') {
+                titleEl.innerText = 'Reset Kandungan Ke Asal?';
+                msgEl.innerText = 'Semua perubahan yang pernah anda buat akan digantikan semula dengan kandungan asal KPM.';
+            }
+
+            document.getElementById('confirmModal').classList.remove('hidden');
+        }
+
+        function closeConfirmModal() {
+            document.getElementById('confirmModal').classList.add('hidden');
+            appState.pendingConfirmAction = null;
+        }
+
+        function executeConfirmedAction() {
+            const action = appState.pendingConfirmAction;
+            closeConfirmModal();
+
+            if (action === 'delete') {
+                const topicId = document.getElementById('editTopicId').value;
+                if (topicId) {
+                    topicsData = topicsData.filter(t => t.id !== topicId);
+                    saveTopicsToStorage();
+                    renderAdminTopicList();
+                    resetAdminForm();
+                    showToast('Tajuk telah dipadam.', '🗑️');
+                }
+            } else if (action === 'reset') {
+                topicsData = [...DEFAULT_TOPICS];
+                appState.config = { ...DEFAULT_CONFIG };
+                saveTopicsToStorage();
+                saveConfigToStorage();
+                renderAdminTopicList();
+                resetAdminForm();
+                showToast('Kandungan & tetapan direset ke asal KPM.', '🔄');
+            }
+        }
+
+        /* EXPORT & IMPORT JSON DATA */
+        function exportData() {
+            const payload = {
+                config: appState.config,
+                topics: topicsData
+            };
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `MELISA_Data_Backup_${Date.now()}.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+            showToast('Backup JSON berjaya dimuat turun!', '💾');
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const parsed = JSON.parse(e.target.result);
+                    if (parsed.topics && Array.isArray(parsed.topics)) {
+                        topicsData = parsed.topics;
+                        if (parsed.config) appState.config = parsed.config;
+                        saveTopicsToStorage();
+                        saveConfigToStorage();
+                        renderAdminTopicList();
+                        resetAdminForm();
+                        showToast('Data kandungan berjaya diimport!', '📥');
+                    } else if (Array.isArray(parsed)) {
+                        topicsData = parsed;
+                        saveTopicsToStorage();
+                        renderAdminTopicList();
+                        resetAdminForm();
+                        showToast('Data tajuk berjaya diimport!', '📥');
+                    } else {
+                        showToast('Format fail JSON tidak sah.', '⚠️');
+                    }
+                } catch(err) {
+                    showToast('Gagal membaca fail JSON.', '❌');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function handleFeedbackSubmit(e) {
+            e.preventDefault();
+            showToast('Terima kasih! Maklum balas anda disimpan.', '❤️');
+            document.getElementById('feedbackComment').value = '';
+        }
+
+        function showToast(message, icon = '✨') {
+            const toast = document.getElementById('toastMessage');
+            const toastText = document.getElementById('toastText');
+            const toastIcon = document.getElementById('toastIcon');
+
+            toastText.innerText = message;
+            toastIcon.innerText = icon;
+
+            toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
